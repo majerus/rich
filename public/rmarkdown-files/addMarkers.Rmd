@@ -1,0 +1,43 @@
+---
+output: html_document
+---
+
+```{r, include=FALSE}
+
+knitr::opts_chunk$set(out.width='100%')
+
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+
+library(leaflet)
+library(tidyverse)
+
+# insert your leaflet url from Mapbox here.
+my_map_tile <- "your leaflet url goes here inside quotes"
+
+```
+
+```{r, include=FALSE}
+my_map_tile <- "https://api.mapbox.com/styles/v1/richmajerus/cjjk9nvcv2s312slk47c4kjsh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmljaG1hamVydXMiLCJhIjoiY2pqajExNXR3MWZjOTNxcXNlcmozcmluOSJ9.3dhuKIBrVs2y5iDMGOoyPg"
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+
+# read in ipeds data on all four-year colleges
+colleges <- read_csv("https://raw.githubusercontent.com/majerus/NEDRA2018/master/four_year_colleges_2017.csv")
+
+# add colleges to our map!
+colleges %>% 
+  leaflet() %>% 
+    addTiles(urlTemplate = my_map_tile) %>% 
+    setView(lng = -98.6 , lat = 39.8, zoom = 2) %>% 
+    addCircles(label = ~name, color = "#3c7e61")
+```
+
+
+
+
+

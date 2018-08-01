@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+
+<!-- 
+Strata by HTML5 UP
+html5up.net | @n33co
+Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Creating a Custom Map Tile &middot; {Rich Majerus}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="author" content="Rich Majerus">
+		<meta name="description" content="Personal website of Rich Majerus, AVP of Advancement Strategy and Donor Relations at Colby College. ">
+		<meta http-equiv="content-language" content="en-us" />
+
+		
+		<meta name="og:site_name" content="{Rich Majerus}">
+		<meta name="og:title" content="Creating a Custom Map Tile">
+		<meta name="og:url" content="/post/creating-a-custom-map-tile/">
+		
+		<meta name="og:image" content="/images/drawing.png">
+		
+		
+
+		<meta name="generator" content="Hugo 0.44" />
+
+		<!--[if lte IE 8]><script src='/js/ie/html5shiv.js'></script><![endif]-->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/css/main.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="//css/ie8.css"><![endif]-->
+
+		
+		
+	</head>
+
+	<body id="top">
+		<!-- Header -->
+<header id="header">
+	
+	<a href="/" class="image avatar"><img src="/images/drawing.png" alt="" /></a>
+	
+	
+		<h1>I&rsquo;m <strong>Rich Majerus</strong>, <br/> a data scientist,  <br/> amateur carpenter,  <br/> and lazy hiker.<br></h1>
+	
+
+	
+		<nav id="sidebar">
+			<ul>
+			
+				<li><a href="/">Home</a></li>
+			
+				<li><a href="/post/">Blog</a></li>
+			
+			</ul>
+		</nav>
+	
+</header>
+
+
+		<!-- Main -->
+		<div id="main">
+			
+	<span>
+		<h1>Creating a Custom Map Tile</h1>
+
+		<i class="fa fa-calendar"></i>&nbsp;&nbsp;
+<time datetime="2018-07-13 00:00:00 &#43;0000 UTC">2018-07-13</time>&nbsp;&nbsp;
+
+
+
+
+    
+    
+        <i class="fa fa-folder"></i>&nbsp;&nbsp;
+        
+        <a class="article-category-link" href="/categories/r">R</a>
+        
+        
+    
+
+
+
+   
+   
+       &nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;&nbsp;
+       
+       <a class="article-category-link" href="/tags/leaflet">leaflet</a>
+       &middot;
+       
+       <a class="article-category-link" href="/tags/maps">maps</a>
+       &middot;
+       
+       <a class="article-category-link" href="/tags/r">R</a>
+       &middot;
+       
+       <a class="article-category-link" href="/tags/mapbox">mapbox</a>
+       
+       
+   
+
+
+	</span>
+
+	<p>
+	    <p>In my <a href="https://www.datacamp.com/courses/interactive-maps-with-leaflet-in-r">DataCamp</a> course on making interactive web maps in R using leaflet, I covered how to change the map tile using the <code>addProviderTiles</code> function. This allows us to use the more than 100 map tiles included with the <code>leaflet</code> package. For example, we can create a map using the Esri provider tile.</p>
+
+<iframe width="100%" height = 650 src="/rmarkdown-files/leaflet_Esri.html" frameborder="0" allowfullscreen></iframe>
+
+<p>However, there may come a time when we need to customize a map beyond using these provider tiles so that it fits with a particular project or website.  One way to accomplish this is to use <a href="www.mapbox.com">Mapbox</a>. What follows is a quick overview that demostrates how to access and build custom maptiles in R, for more information see the <a href="https://www.mapbox.com/help/tutorials/">Mapbox tutorials</a>.</p>
+
+<p>Once we create an account on Mapbox, we will have access to their <a href="https://www.mapbox.com/studio/">design studio</a> that enables point-and-click editting of map layers, colors, icons, fonts, etc. Currently, Mapbox provides 50,000 map views a month for free (see <a href="https://www.mapbox.com/pricing/">pricing</a>).</p>
+
+<p>In the design studio we can start with the basic template or select one of the core styles that may approximate the look that we are going for.</p>
+
+<p><br><br></p>
+
+<p><img src="/img/design_studio.png" width="100%"></p>
+
+<p><br><br></p>
+
+<p>For this example, I&rsquo;ll be working with the Decimal map template. Once we select a map style the editor will open and we will see the map, the map layers presented in the left-hand sidebar, and some additional functionality presented in the upper-right corner menu (e.g., adding images, fonts, etc.).</p>
+
+<p><br><br></p>
+
+<p><img src="/img/decimal.png" width="100%"></p>
+
+<p><br><br></p>
+
+<p>We can edit the layers individually or we can edit the several layers of the same type at the same time by selecting multiple layers while holding shift.</p>
+
+<p><br><br></p>
+
+<p><img src="/img/decimal_layers.png" width="100%"></p>
+
+<p><br><br></p>
+
+<p>For example, we could change the color of the lines from green to blue (i.e., <code>#002787</code>).</p>
+
+<p><img src="/img/decimal_change_color.png" width="100%"></p>
+
+<p><br><br></p>
+
+<p>We can also include stops at different zoom levels so that the colors of certain layers of our map transition as we zoom.</p>
+
+<p><br><br></p>
+
+<p><img src="/img/mapbox_color.gif" width="100%"></p>
+
+<p><br><br></p>
+
+<p>Once we have our map styled, we can use it from R by clicking publish in the upper-right corner menu.</p>
+
+<p><img src="/img/publish.png" width="100%"></p>
+
+<p>After we publish our map, we can click share and scroll to the &ldquo;Develop with this Style box&rdquo;. Then switch the slider from Mapbox to leaflet and copy the link. We can access our new map from R using the <code>urlTemplate</code> argument of the <code>addTiles</code> function. Zoom in to check out those blue lines!</p>
+
+<iframe width="100%" height = 750 src="/rmarkdown-files/leaflet_urlTemplate.html" frameborder="0" allowfullscreen></iframe>
+
+<p>Then we can add markers or other features using the functions from the <code>leaflet</code> package.</p>
+
+<iframe width="100%" height = 850 src="/rmarkdown-files/addMarkers.html" frameborder="0" allowfullscreen></iframe>
+
+<p>Give it a try and let me know what you create!</p>
+
+	</p>
+
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+		</div>
+
+		<!-- Footer -->
+<footer id="footer">
+	<ul class="icons">
+		
+		
+		
+		<li><a href="//twitter.com/richmajerus" target="_blank" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+		
+		
+		<li><a href="//github.com/majerus" target="_blank" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		
+		
+		
+		<li><a href="//linkedin.com/in/rich-majerus" target="_blank" class="icon fa-linkedin-square"><span class="label">Linkedin</span></a></li>
+		
+		
+		
+		
+		<li><a href="/#contact-form" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+		
+		
+		<li><a href="/index.xml" class="icon fa-rss" type="application/rss+xml"><span class="label">RSS</span></a></li>
+		
+	</ul>
+
+	<ul class="copyright">
+		
+		<li>&copy; Rich Majerus</li>
+		
+		<li>Design: <a href="//html5up.net">HTML5 UP</a></li>
+		
+		<li>Images: <a href="//brookevertin.com/">Brooke Vertin</a></li>
+		
+	</ul>
+</footer>
+
+<!-- Scripts -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.poptrox.min.js"></script>
+<script src="/js/skel.min.js"></script>
+<script src="/js/util.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-57444056-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+	</body>
+</html>

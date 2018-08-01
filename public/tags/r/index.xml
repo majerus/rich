@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on {Rich Majerus}</title>
+    <link>/tags/r/</link>
+    <description>Recent content in R on {Rich Majerus}</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 27 Jul 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using Leaflet and Googlesheets in a Shiny App </title>
+      <link>/post/using-leaflet-and-googlesheets-in-a-shiny-app/</link>
+      <pubDate>Fri, 27 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/using-leaflet-and-googlesheets-in-a-shiny-app/</guid>
+      <description>Building on the Making a Maine Map with purrr to Add Multiple Layers blog post, this week I worked to deploy a map of my favorite places in Maine as a shiny app. There are a couple of advantages to this approach:
+ New favorites that I add to my googlesheet will be automatically geocoded and added to the map I can add a table that is linked to the map (i.</description>
+    </item>
+    
+    <item>
+      <title>Making a Maine Map with purrr to Add Multiple Layers</title>
+      <link>/post/my-maine-map/</link>
+      <pubDate>Sat, 21 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/my-maine-map/</guid>
+      <description>This week I went backcountry camping with Brooke at Cutler Public Land Preserve on Maine&amp;rsquo;s northern coast. Mainers call this area the bold coast for its dramatic cliffs, which was certainly the case at our campsite pictured below.
+I&amp;rsquo;ve hiked Cutler before but forgot how awesome and awe-inspiring the landscape is. While we were hiking out we started talking about other places in Maine that we&amp;rsquo;ve visited and would like to go back to.</description>
+    </item>
+    
+    <item>
+      <title>Creating a Custom Map Tile</title>
+      <link>/post/creating-a-custom-map-tile/</link>
+      <pubDate>Fri, 13 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/creating-a-custom-map-tile/</guid>
+      <description>In my DataCamp course on making interactive web maps in R using leaflet, I covered how to change the map tile using the addProviderTiles function. This allows us to use the more than 100 map tiles included with the leaflet package. For example, we can create a map using the Esri provider tile.
+ However, there may come a time when we need to customize a map beyond using these provider tiles so that it fits with a particular project or website.</description>
+    </item>
+    
+    <item>
+      <title>Interactive Maps with leaflet in R on DataCamp</title>
+      <link>/post/interactive-maps-with-leaflet-in-r-on-datacamp/</link>
+      <pubDate>Fri, 06 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/interactive-maps-with-leaflet-in-r-on-datacamp/</guid>
+      <description>My first course on DataCamp launched on July 5th, 2018. This course uses data on all American colleges and universities to explore various ways of mapping point data and income data to demonstrate how to map polygon data. In the later chapters, I cover how to add a few pieces of flair to leaflet maps in R.
+Here is one of the interactive maps from the last chapter&amp;hellip;
+The first chapter is free.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,349 @@
+<!DOCTYPE HTML>
+
+<!-- 
+Strata by HTML5 UP
+html5up.net | @n33co
+Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Making a Maine Map with purrr to Add Multiple Layers &middot; {Rich Majerus}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="author" content="Rich Majerus">
+		<meta name="description" content="Personal website of Rich Majerus, AVP of Advancement Strategy and Donor Relations at Colby College. ">
+		<meta http-equiv="content-language" content="en-us" />
+
+		
+		<meta name="og:site_name" content="{Rich Majerus}">
+		<meta name="og:title" content="Making a Maine Map with purrr to Add Multiple Layers">
+		<meta name="og:url" content="/post/my-maine-map/">
+		
+		<meta name="og:image" content="/images/drawing.png">
+		
+		
+
+		<meta name="generator" content="Hugo 0.44" />
+
+		<!--[if lte IE 8]><script src='/js/ie/html5shiv.js'></script><![endif]-->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/css/main.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="//css/ie8.css"><![endif]-->
+
+		
+		
+	</head>
+
+	<body id="top">
+		<!-- Header -->
+<header id="header">
+	
+	<a href="/" class="image avatar"><img src="/images/drawing.png" alt="" /></a>
+	
+	
+		<h1>I&rsquo;m <strong>Rich Majerus</strong>, <br/> a data scientist,  <br/> amateur carpenter,  <br/> and lazy hiker.<br></h1>
+	
+
+	
+		<nav id="sidebar">
+			<ul>
+			
+				<li><a href="/">Home</a></li>
+			
+				<li><a href="/post/">Blog</a></li>
+			
+			</ul>
+		</nav>
+	
+</header>
+
+
+		<!-- Main -->
+		<div id="main">
+			
+	<span>
+		<h1>Making a Maine Map with purrr to Add Multiple Layers</h1>
+
+		<i class="fa fa-calendar"></i>&nbsp;&nbsp;
+<time datetime="2018-07-21 00:00:00 &#43;0000 UTC">2018-07-21</time>&nbsp;&nbsp;
+
+
+
+
+    
+    
+        <i class="fa fa-folder"></i>&nbsp;&nbsp;
+        
+        <a class="article-category-link" href="/categories/r">R</a>
+        
+        
+    
+
+
+
+   
+   
+       &nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;&nbsp;
+       
+       <a class="article-category-link" href="/tags/leaflet">leaflet</a>
+       &middot;
+       
+       <a class="article-category-link" href="/tags/maps">maps</a>
+       &middot;
+       
+       <a class="article-category-link" href="/tags/r">R</a>
+       
+       
+   
+
+
+	</span>
+
+	<p>
+	    
+
+<p>This week I went backcountry camping with Brooke at Cutler Public Land Preserve on Maine&rsquo;s northern coast. Mainers call this area the bold coast for its dramatic cliffs, which was certainly the case at our campsite pictured below.</p>
+
+<p><img src="/img/cutler.JPG" width="100%"></p>
+
+<p>I&rsquo;ve hiked Cutler before but forgot how awesome and awe-inspiring the landscape is. While we were hiking out we started talking about other places in Maine that we&rsquo;ve visited and would like to go back to. It seems like whenever anyone comes to visit (which seems like every weekend in July and never in February&hellip;), we can&rsquo;t remember all of the great places Maine has to offer us and our friends.</p>
+
+<p>To help me remember our Maine favorites, I created a leaflet map that categorizes our favorite places to camp, eat, drink, learn, shop, and sight-see.</p>
+
+<iframe width="100%" height = 750 src="/rmarkdown-files/maine_map.html" frameborder="0" allowfullscreen></iframe>
+
+<p>The markers are added in seperate layers using the <code>purrr</code> package, so we don&rsquo;t have to call <code>addAwesomeMarkers</code> a bunch of times and to make it easier to add new categories and more favorites later. Each type of marker can be toggled on and off using the menu in the upper right corner and clicking on a marker reveals a popup with more information about the location.
+The data for the map lives in a <a href="https://docs.google.com/spreadsheets/d/1E9ARIwEj76Atp_kbYziGAWNAyLK82tO_Ad5IdRMjpWE/edit#gid=0">googlesheet</a> and I wrote an R script to geocode new locations that are added to the sheet.</p>
+
+<h2 id="geocoding-our-maine-favorites">Geocoding Our Maine Favorites</h2>
+
+<p>After loading the libraries, we use the <code>googlesheets</code> package to read the data into R. The sheet key used to locate the sheet in the <code>gs_key</code> function is available in the sheet&rsquo;s url.</p>
+
+<pre><code># load libraries 
+library(googlesheets)
+library(tidyverse)
+library(ggmap)
+
+# load maine places data from googlesheets 
+maine_sheet &lt;- gs_key(&quot;1E9ARIwEj76Atp_kbYziGAWNAyLK82tO_Ad5IdRMjpWE&quot;, 
+                      lookup = FALSE,
+                      visibility = &quot;private&quot;) 
+    
+# read maine place data into a dataframe 
+maine &lt;- gs_read(maine_sheet) 
+
+</code></pre>
+
+<p>Then we split the data into new and old locations (i.e., those that have coordinates and those that do not.).</p>
+
+<pre><code># create df of locations without lat/lon
+new_locations &lt;- 
+  maine %&gt;% 
+  filter(is.na(lon)) %&gt;% 
+  mutate(location = paste(address, city, &quot;Maine&quot;, sep = &quot;, &quot;)) %&gt;% 
+  select(-lon, -lat) 
+
+# create df of locations with lat/lon 
+old_locations &lt;- 
+  maine %&gt;% 
+  filter(!is.na(lon))
+
+</code></pre>
+
+<p>Leaving the old locations alone, we geocode all of the new locations. To return a geocoded data frame  in one fell swoop we use the <code>map_df</code> function from the <code>purrr</code> package to iterate the <code>geocode</code> function from the <code>ggmaps</code> package over each row in the <code>new_locations</code> data frame.</p>
+
+<pre><code># geocode new locations 
+new_locations &lt;- 
+  new_locations %&gt;%
+  select(location) %&gt;% 
+  # geocode each location in new_locations
+  map_df(~geocode(., override_limit = TRUE)) %&gt;% 
+  # bind lon and lat onto new_locations
+  bind_cols(new_locations, .) %&gt;% 
+  # drop location variable created for geocoding
+  select(-location)
+</code></pre>
+
+<p>Then we reunite the new and old locations and write the new data back to the same googlesheet using the <code>gs_edit_cells</code> function from the <code>googlesheets</code> package.</p>
+
+<pre><code># combine new and old locations 
+maine &lt;- 
+  new_locations %&gt;% 
+  bind_rows(old_locations)
+
+# write data with new lat/lon to googlesheet
+gs_edit_cells(ss = maine_sheet, 
+              ws = &quot;Maine&quot;, 
+              input = maine, 
+              anchor = &quot;A1&quot;,
+              trim = TRUE,
+              col_names = TRUE)
+</code></pre>
+
+<h2 id="mapping-our-maine-favorites">Mapping Our Maine Favorites</h2>
+
+<p>We could use the same approach from the <code>googlesheets</code> package to read our data into R to create a map, but I chose a simpler alternative - publishing the sheet to the web as a .csv and loading the data into R using the <code>read_csv</code> function. The published .csv will update wheneve the googlesheet is changed so this approach should always use the most recent data. To publish a googlesheet to the web, click on the file menu and select publish to the web (note: this is different than publicly sharing your googlehseet.)</p>
+
+<p><img src="/img/gs_publish1.png" width="100%"></p>
+
+<p>Then we can load our data just like any other .csv file.</p>
+
+<pre><code># read data from googlesheet that is published to the web
+maine &lt;- read_csv(&quot;https://docs.google.com/spreadsheets/d/e/2PACX-1vRIi2n-sBlNHVgMTV3AwxvqeYq5yy-4pbv0rl9mi2xGTobwupj7AvfXaV13c9xqnRwuPWXxYFVqYh6B/pub?gid=0&amp;single=true&amp;output=csv&quot;)
+
+</code></pre>
+
+<p>Then we select a font awesome icon for each category of favorites included in the data. Because we use <code>purrr</code> later to add the markers this is the only section of the code that would need to be updated if new categories are added to the data.</p>
+
+<pre><code># make awesome icons 
+  # use version 4 docs https://fontawesome.com/v4.7.0/
+  # if a new category is added this is the only code that needs to be updated
+  # adding the new marker to the icon list will automatically add it to the map
+maine_icons &lt;- awesomeIconList(
+  drink = makeAwesomeIcon(icon = &quot;beer&quot;, library = &quot;fa&quot;, markerColor = &quot;beige&quot;),
+  eat   = makeAwesomeIcon(icon = &quot;cutlery&quot;, library = &quot;fa&quot;, markerColor = &quot;lightred&quot;),
+  camp  = makeAwesomeIcon(icon = &quot;fire&quot;, library = &quot;fa&quot;, markerColor = &quot;green&quot;),
+  see   = makeAwesomeIcon(icon = &quot;eye&quot;, library = &quot;fa&quot;, markerColor = &quot;blue&quot;),
+  learn = makeAwesomeIcon(icon = &quot;graduation-cap&quot;, library = &quot;fa&quot;, markerColor = &quot;purple&quot;),
+  shop  = makeAwesomeIcon(icon = &quot;shopping-cart&quot;, library = &quot;fa&quot;, markerColor = &quot;orange&quot;)
+)
+
+</code></pre>
+
+<p>One more step before the heavy lifting, let&rsquo;s add a popup variable that links to the webiste of each of the locations.</p>
+
+<pre><code># make popup text with name, address, notes, and link to website
+maine &lt;-
+  maine %&gt;% 
+  mutate(popup = paste(&quot;&lt;b&gt;&lt;a href='&quot;, link,&quot;'&gt;&quot;, name,&quot;&lt;/a&gt;&lt;/b&gt;&quot;, &quot;&lt;br/&gt;&quot;,
+                       address, ', ', city, &quot;&lt;br/&gt;&quot;, sep=''))
+</code></pre>
+
+<p>Now we&rsquo;re ready to make our map. First, we set up our base map and store it in an object called <code>m</code>.</p>
+
+<pre><code>m &lt;- 
+  leaflet() %&gt;% 
+  addTiles()
+</code></pre>
+
+<p>Then we add one layer to our map for each type of marker in <code>maine_icons</code>, so as of now we are adding six layers (i.e., camp, drink, eat, learn, shop, and see). To do this without <code>purrr</code> we would have to call <code>addAwesomeMarkers</code> six times and would have to remember to add another call to <code>addAwesomeMarkers</code> whenever we added a new type of marker to <code>maine_icons</code>. With the <code>walk</code> function from <code>purrr</code> we can add all of these layers to <code>m</code> in one go.  It took me a little while to figure out how to use <code>walk</code> to accomplish this, but I think the payoff going forward is clear as adding to the map will be much easier going forward.</p>
+
+<pre><code># add one overlay layer for each marker in maine_icons using purrr
+# use walk from per to return m after adding each layer
+names(maine_icons) %&gt;%                     # get names of markers in awesomeIconList
+  walk(function(x)                         # then walk through vector of names one at a time
+    m &lt;&lt;- 
+      m %&gt;% addAwesomeMarkers(             # creating a new awesome marker layer  
+      data = filter(maine, category == x), # for each category in the maine data
+      group = x,                           
+      icon = maine_icons[[x]],
+      popup = ~popup))
+</code></pre>
+
+<p>Finally, we add layer controls to <code>m</code> and save our map.</p>
+
+<pre><code># add layer controls to map 
+m &lt;- 
+  m %&gt;% 
+  addLayersControl(
+    overlayGroups = names(maine_icons),
+    options = layersControlOptions(collapsed = TRUE)
+  )
+
+# save widget 
+saveWidget(m, &quot;/rmarkdown-files/maine_map.html&quot;)
+
+</code></pre>
+
+<p>I hope you enjoy checking out a few of our favorite places in Maine and feel free to send suggestions my way.</p>
+
+<p>The full <a href="/maine-app/geocode_locations.R">geocoding</a> and <a href="/maine-app/map.R">mapping</a> R scripts are available in the github repo for my personal website.</p>
+
+<p>My goal for next week is to set this up in a shiny app so that new locations added to the googlesheet are automatically geocoded without having to run the <code>geocode_locations.R</code> script and to demonstrate how to deploy leaflet maps in shiny with a few enhanced user features.</p>
+
+	</p>
+
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+		</div>
+
+		<!-- Footer -->
+<footer id="footer">
+	<ul class="icons">
+		
+		
+		
+		<li><a href="//twitter.com/richmajerus" target="_blank" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+		
+		
+		<li><a href="//github.com/majerus" target="_blank" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		
+		
+		
+		<li><a href="//linkedin.com/in/rich-majerus" target="_blank" class="icon fa-linkedin-square"><span class="label">Linkedin</span></a></li>
+		
+		
+		
+		
+		<li><a href="/#contact-form" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+		
+		
+		<li><a href="/index.xml" class="icon fa-rss" type="application/rss+xml"><span class="label">RSS</span></a></li>
+		
+	</ul>
+
+	<ul class="copyright">
+		
+		<li>&copy; Rich Majerus</li>
+		
+		<li>Design: <a href="//html5up.net">HTML5 UP</a></li>
+		
+		<li>Images: <a href="//brookevertin.com/">Brooke Vertin</a></li>
+		
+	</ul>
+</footer>
+
+<!-- Scripts -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.poptrox.min.js"></script>
+<script src="/js/skel.min.js"></script>
+<script src="/js/util.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-57444056-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+	</body>
+</html>

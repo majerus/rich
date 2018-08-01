@@ -1,0 +1,19 @@
+---
+output: html_document
+---
+
+```{r, include=FALSE}
+
+knitr::opts_chunk$set(out.width='100%')
+
+```
+
+
+```{r, warning=FALSE}
+library(leaflet)
+
+leaflet() %>% 
+  addProviderTiles(provider = "Esri") %>% 
+  setView(lng = -40.2, lat=35.6, zoom = 2)
+
+```

@@ -1,0 +1,148 @@
+baseurl = "/"
+languageCode = "en-us"
+title = "{Rich Majerus}"
+theme = "hugo-strata-theme"
+disqusShortname = "spf13"
+# Enable Google Analytics by inserting your tracking code
+googleAnalytics = "UA-57444056-2"
+# Define how many posts should appear on a site
+paginate = 10
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+[params]
+	# To provide some metadata for search engines feel free to add a few
+    # information about you and your website.
+	name = "Rich Majerus"
+	description = "Personal website of Rich Majerus, AVP of Advancement Strategy and Donor Relations at Colby College. "
+
+	# Format dates with Go's time formatting
+	date_format = "2006-01-02"
+
+	# Add read time estimates in the format "X min read"
+	show_read_time = false
+
+	# Add custom assets with their paths relative to the static folder
+	custom_js   = []
+	custom_css  = []
+
+
+	[params.sidebar]
+		# Replace the avatar with a picture of your own under static/images
+		avatar = "drawing.png"
+		# Use Markdown to format the string. This works nearly all over the theme
+		bio = "I'm **Rich Majerus**, <br/> a data scientist,  <br/> amateur carpenter,  <br/> and lazy hiker.<br>"
+		# The icons will be shown if you enter your username
+		twitter = "richmajerus"
+		github = "majerus"
+		gitlab = ""
+		dribbble = ""
+		facebook = ""
+		googleplus = ""
+		flickr = ""
+		linkedin = "rich-majerus"
+
+		copyright = [
+			"&copy; Rich Majerus",
+			"Design: [HTML5 UP](//html5up.net)",
+			"Images: [Brooke Vertin](//brookevertin.com/)"
+		]
+
+
+	[params.about]
+		hide  = false
+		title = "About Me..."
+		content = "I'm the Assistant Vice President of Donor Relations and Advancement Strategy at Colby College, where I work to develop new approaches to modeling and visualizing fundraising data. I teach R workshops and am listed in RStudio’s directory of instructors.  Additionally, I'm an instructor on DataCamp and a data science mentor with SpringBoard. Previously, I was a founder of Third Coast Analytics (TCA), a data science consulting firm (TCA’s IP was acquired by Capture Higher Ed in 2016)."
+
+
+	[params.portfolio]
+		hide  = false
+		title = "Recent Work"
+
+		# The images and thumbnails are stored under static/images
+		# Create and change subfolders as you like
+		[[params.portfolio.gallery]]
+			image = "office.JPG"
+			thumb = "office.JPG"
+			title = "Home Office"
+			description = "Built a new office above the garage in July 2018."
+
+		[[params.portfolio.gallery]]
+			image = "datacamp_leaflet.png"
+			thumb = "datacamp_leaflet.png"
+			title = "[Interactive Maps with Leaflet in R](https://www.datacamp.com/courses/interactive-maps-with-leaflet-in-r)"
+			description = "Launched my first course on DataCamp in July 2018." 
+#
+		#[[params.portfolio.gallery]]
+		#	image = "fulls/03.jpg"
+		#	thumb = "thumbs/03.jpg"
+		#	title = "Lorem ipsum dolor."
+		#	description = "Lorem ipsum dolor sit amet."
+#
+		#[[params.portfolio.gallery]]
+		#	image = "fulls/04.jpg"
+		#	thumb = "thumbs/04.jpg"
+		#	title = "Lorem ipsum dolor."
+		#	description = "Lorem ipsum dolor sit amet."
+#
+		#[[params.portfolio.gallery]]
+		#	image = "fulls/05.jpg"
+		#	thumb = "thumbs/05.jpg"
+		#	title = "Lorem ipsum dolor."
+		#	description = "Lorem ipsum dolor sit amet."
+#
+		#[[params.portfolio.gallery]]
+		#	image = "fulls/06.jpg"
+		#	thumb = "thumbs/06.jpg"
+		#	title = "Lorem ipsum dolor."
+		#	description = "Lorem ipsum dolor sit amet."
+
+	[params.recentposts]
+		hide  = false
+		title = "Recent blog posts"
+
+	[params.contact]
+		hide  = false
+		title = "Get In Touch"
+		content = ""
+
+		# This can be exact coordinates or a searchable address in google maps
+	# gmaps_address = ""
+	# address = [
+	# 	"Colby College",
+	# 	"Waterville, ME",
+	# 	"United States"
+	# ]
+	# phone = "000-000-0000"
+
+		# Since this template is static, the contact form uses www.formspree.io as a
+		# proxy. The form makes a POST request to their servers to send the actual
+		# email. Visitors can send up to a 1000 emails each month for free.
+	    #
+	    # What you need to do for the setup?
+	    #
+	    # - set your email address under 'email' below
+	    # - upload the generated site to your server
+	    # - send a dummy email yourself to confirm your account
+	    # - click the confirm link in the email from www.formspree.io
+	    # - you're done. Happy mailing!
+		email = "rich.majerus@gmail.com"
+
+		[params.contact.form]
+			# Set custom strings for the form if your native
+			# language isn't English
+			name = "Name"
+			email = "Email"
+			message = "Message"
+			submit = "Send message"
+
+
+# Menu links that appear on the left sidebar
+[[menu.main]]
+	name = "Home"
+	url  = "/"
+	weight = 10
+
+[[menu.main]]
+	name = "Blog"
+	url  = "post/"
+	weight = 0

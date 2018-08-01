@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+
+<!-- 
+Strata by HTML5 UP
+html5up.net | @n33co
+Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Using Leaflet and Googlesheets in a Shiny App  &middot; {Rich Majerus}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="author" content="Rich Majerus">
+		<meta name="description" content="Personal website of Rich Majerus, AVP of Advancement Strategy and Donor Relations at Colby College. ">
+		<meta http-equiv="content-language" content="en-us" />
+
+		
+		<meta name="og:site_name" content="{Rich Majerus}">
+		<meta name="og:title" content="Using Leaflet and Googlesheets in a Shiny App ">
+		<meta name="og:url" content="/post/using-leaflet-and-googlesheets-in-a-shiny-app/">
+		
+		<meta name="og:image" content="/images/drawing.png">
+		
+		
+
+		<meta name="generator" content="Hugo 0.44" />
+
+		<!--[if lte IE 8]><script src='/js/ie/html5shiv.js'></script><![endif]-->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/css/main.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="//css/ie8.css"><![endif]-->
+
+		
+		
+	</head>
+
+	<body id="top">
+		<!-- Header -->
+<header id="header">
+	
+	<a href="/" class="image avatar"><img src="/images/drawing.png" alt="" /></a>
+	
+	
+		<h1>I&rsquo;m <strong>Rich Majerus</strong>, <br/> a data scientist,  <br/> amateur carpenter,  <br/> and lazy hiker.<br></h1>
+	
+
+	
+		<nav id="sidebar">
+			<ul>
+			
+				<li><a href="/">Home</a></li>
+			
+				<li><a href="/post/">Blog</a></li>
+			
+			</ul>
+		</nav>
+	
+</header>
+
+
+		<!-- Main -->
+		<div id="main">
+			
+	<span>
+		<h1>Using Leaflet and Googlesheets in a Shiny App </h1>
+
+		<i class="fa fa-calendar"></i>&nbsp;&nbsp;
+<time datetime="2018-07-27 00:00:00 &#43;0000 UTC">2018-07-27</time>&nbsp;&nbsp;
+
+
+
+
+    
+    
+        <i class="fa fa-folder"></i>&nbsp;&nbsp;
+        
+        <a class="article-category-link" href="/categories/r">R</a>
+        
+        
+    
+
+
+
+   
+   
+       &nbsp;&nbsp;<i class="fa fa-tags"></i>&nbsp;&nbsp;
+       
+       <a class="article-category-link" href="/tags/leaflet">leaflet</a>
+       &middot;
+       
+       <a class="article-category-link" href="/tags/maps">maps</a>
+       &middot;
+       
+       <a class="article-category-link" href="/tags/r">R</a>
+       &middot;
+       
+       <a class="article-category-link" href="/tags/mapbox">mapbox</a>
+       
+       
+   
+
+
+	</span>
+
+	<p>
+	    
+
+<p>Building on the <a href="http://richmajerus.com/post/my-maine-map/">Making a Maine Map with purrr to Add Multiple Layers</a> blog post, this week I worked to deploy a map of my favorite places in Maine as a <a href="https://rich.shinyapps.io/maine-map/">shiny app</a>. There are a couple of advantages to this approach:</p>
+
+<ul>
+<li>New favorites that I add to my <a href="https://docs.google.com/spreadsheets/d/1E9ARIwEj76Atp_kbYziGAWNAyLK82tO_Ad5IdRMjpWE/edit?usp=sharing">googlesheet</a> will be automatically geocoded and added to the map</li>
+<li>I can add a table that is linked to the map (i.e., will display the names and locations of all of the locations visible on map).</li>
+</ul>
+
+<p>The <a href="https://rich.shinyapps.io/maine-map/">app</a> is hosted on shinyapps.io (thanks RStudio) and the <a href="https://github.com/majerus/rich/tree/master/static/maine-app">code</a> is available on github. I&rsquo;ve tried to highlight a few features of the app in more depth below, so keep reading after checking out a few of my Maine favorites.</p>
+
+<iframe width="100%" height = 1000 src="https://rich.shinyapps.io/maine-map/" frameborder="0" allowfullscreen></iframe>
+
+<h2 id="loading-data-from-a-googlesheet-in-a-shiny-app">Loading data from a googlesheet in a shiny app</h2>
+
+<p>Every time the app is loaded in a web browser shiny checks for locations that do not have lat/lon coordinates. If there are any missing coordinates these locations are geocoded using <code>ggmap::geocode</code>. If there were a lot of data it would be inefficient to reload all of the locations each time a web browser is refreshed, but given the small number of points (currently ~30) this was an easy trade-off to have new locations quickly and easily geocoded when the app is refreshed. The app works this way because the call to the geocoding script is inside the server function in the <code>server.r</code> file. To load the data only when the app is first initialized, we could move <code>source(&quot;geocode_locations.R&quot;)</code> above <code>function(input, output)</code> or to the <code>global.r</code> file.</p>
+
+<pre><code># server - maine map app
+
+function(input, output){ 
+  
+  # source geocoding script to geocode any new locations to googlesheet  
+  source(&quot;geocode_locations.R&quot;)
+  ...
+}
+</code></pre>
+
+<p>To enable the deployed app to read the googlesheet, I chose to include the <code>oauth</code> file that is created by the <code>googlesheets</code> package when I pushed the app to shinyapps.io. Jenny Bryan and Dean Attali have several helpful examples of how the <code>googlesheets</code> package can be used in shiny apps <a href="https://github.com/jennybc/googlesheets/tree/master/inst/shiny-examples">here</a>.</p>
+
+<h2 id="deploying-a-leaflet-map-in-a-shiny-app">Deploying a leaflet map in a shiny app</h2>
+
+<p>To create the leaflet map in shiny, we use the <code>renderLeaflet</code> function in the <code>server.r</code> file and the <code>leafletOutput</code> function in the <code>ui.r</code> file to display the map to our app&rsquo;s users. Inside the <code>renderLeaflet</code> function we can build our leaflet map similar to how we would in an r script or rmarkdown document.</p>
+
+<pre><code> # create leaflet map output
+  output$maine_map &lt;- renderLeaflet({
+    
+    # clear markers 
+    # the m leaflet object is created in global.r 
+    # markers are cleared on refresh so new locations can be added
+    m &lt;- 
+      m %&gt;% 
+      clearMarkers()
+    
+    # add one overlay layer for each marker in maine_icons using purrr
+    # use walk from per to return m after adding each layer
+    input$location_types %&gt;%                     # get names of markers in awesomeIconList
+      walk(function(x)                         # then walk through vector of names one at a time
+        m &lt;&lt;- 
+          m %&gt;% addAwesomeMarkers(             # creating a new awesome marker layer  
+            data = filter(maine, category == x), # for each category in the maine data
+            group = x,                           
+            icon = maine_icons[[x]],
+            popup = ~popup))
+    
+    m
+  })
+</code></pre>
+
+<p>In this approach, we need to use <code>clearmarkers()</code> so that our markers are (re)added to the map every time a user changes the categories selected in the sidebar menu. Otherwise, when our markers are added by walking over the categories of markers a user selects ( <code>input$location_types %&gt;% walk(function(x)...</code>) more markers would just be added on top of the existing markers and no markers would be removed. There are alternative approaches to building this map in shiny, but I liked the idea of continuing to build my knowledge and familiarity of the <code>purrr</code> package.</p>
+
+<h2 id="using-a-leaflet-map-as-a-filter-in-a-shiny-app">Using a leaflet map as a filter in a shiny app</h2>
+
+<p>A handy trick I learned from RStudio&rsquo;s <a href="https://shiny.rstudio.com/gallery/superzip-example.html">super zip example</a> is to have a leaflet map work both as a data visualization and a filter for data displayed in a table. The data displayed in the table will be automatically filtered as a user zooms and pans the map so that the table only displays the observations that are visible on the map.</p>
+
+<p>All of the magic for this can happen inside the <code>DT::renderDataTable</code> function in the <code>server.r</code> file. First we need to capture the current map bounds and find the highest and lowest values for both lat and lon. Then we can use these values as filters in a <code>dplyr</code> function chain to limit our data to only the observations with coordinates that are within the lat and lon ranges visible on the map.</p>
+
+<pre><code>  # create data table of locations that are visible on the map
+  output$maine_table &lt;- DT::renderDataTable({
+    
+    # get current bounds of map
+    bounds &lt;- input$maine_map_bounds
+    latRng &lt;- range(bounds$north, bounds$south)
+    lngRng &lt;- range(bounds$east, bounds$west)
+    
+    maine %&gt;% 
+      # apply type filter from sidebar
+      filter(category %in% input$location_types) %&gt;% 
+      # apply map filters
+      filter(lon &gt;= lngRng[1],
+             lon &lt;= lngRng[2],
+             lat &gt;= latRng[1],
+             lat &lt;= latRng[2]) %&gt;% 
+      select(name, category, address, city)
+  }, rownames = FALSE) # because rownames :(
+</code></pre>
+
+<p>Take a shot at deploying one of your interactive maps as a shinyapp. You can create an account on <a href="http://www.shinyapps.io/">shinyapps.io</a> and host up to five applications for free.</p>
+
+	</p>
+
+	<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "spf13" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+		</div>
+
+		<!-- Footer -->
+<footer id="footer">
+	<ul class="icons">
+		
+		
+		
+		<li><a href="//twitter.com/richmajerus" target="_blank" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+		
+		
+		<li><a href="//github.com/majerus" target="_blank" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		
+		
+		
+		<li><a href="//linkedin.com/in/rich-majerus" target="_blank" class="icon fa-linkedin-square"><span class="label">Linkedin</span></a></li>
+		
+		
+		
+		
+		<li><a href="/#contact-form" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+		
+		
+		<li><a href="/index.xml" class="icon fa-rss" type="application/rss+xml"><span class="label">RSS</span></a></li>
+		
+	</ul>
+
+	<ul class="copyright">
+		
+		<li>&copy; Rich Majerus</li>
+		
+		<li>Design: <a href="//html5up.net">HTML5 UP</a></li>
+		
+		<li>Images: <a href="//brookevertin.com/">Brooke Vertin</a></li>
+		
+	</ul>
+</footer>
+
+<!-- Scripts -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.poptrox.min.js"></script>
+<script src="/js/skel.min.js"></script>
+<script src="/js/util.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-57444056-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+	</body>
+</html>

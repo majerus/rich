@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mapbox on {Rich Majerus}</title>
+    <link>/tags/mapbox/</link>
+    <description>Recent content in Mapbox on {Rich Majerus}</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 27 Jul 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/mapbox/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using Leaflet and Googlesheets in a Shiny App </title>
+      <link>/post/using-leaflet-and-googlesheets-in-a-shiny-app/</link>
+      <pubDate>Fri, 27 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/using-leaflet-and-googlesheets-in-a-shiny-app/</guid>
+      <description>Building on the Making a Maine Map with purrr to Add Multiple Layers blog post, this week I worked to deploy a map of my favorite places in Maine as a shiny app. There are a couple of advantages to this approach:
+ New favorites that I add to my googlesheet will be automatically geocoded and added to the map I can add a table that is linked to the map (i.</description>
+    </item>
+    
+    <item>
+      <title>Creating a Custom Map Tile</title>
+      <link>/post/creating-a-custom-map-tile/</link>
+      <pubDate>Fri, 13 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/creating-a-custom-map-tile/</guid>
+      <description>In my DataCamp course on making interactive web maps in R using leaflet, I covered how to change the map tile using the addProviderTiles function. This allows us to use the more than 100 map tiles included with the leaflet package. For example, we can create a map using the Esri provider tile.
+ However, there may come a time when we need to customize a map beyond using these provider tiles so that it fits with a particular project or website.</description>
+    </item>
+    
+  </channel>
+</rss>

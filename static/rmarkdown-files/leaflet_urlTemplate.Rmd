@@ -1,0 +1,32 @@
+---
+output: html_document
+---
+
+```{r, include=FALSE}
+
+knitr::opts_chunk$set(out.width='100%')
+
+```
+
+
+```{r, warning=FALSE}
+
+library(leaflet)
+
+# insert your leaflet url from Mapbox here.
+my_map_tile <- "your leaflet url goes here inside quotes"
+
+```
+
+```{r, include=FALSE}
+my_map_tile <- "https://api.mapbox.com/styles/v1/richmajerus/cjjk9nvcv2s312slk47c4kjsh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicmljaG1hamVydXMiLCJhIjoiY2pqajExNXR3MWZjOTNxcXNlcmozcmluOSJ9.3dhuKIBrVs2y5iDMGOoyPg"
+
+```
+
+```{r}
+
+leaflet() %>% 
+  addTiles(urlTemplate = my_map_tile) %>% 
+  setView(lng = -40.2, lat=35.6, zoom = 2)
+
+```

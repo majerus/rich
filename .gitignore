@@ -1,0 +1,9 @@
+.httr-oauth
+.dcf
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+blogdown
+.DS_Store 
+public/ # if using Netlify
