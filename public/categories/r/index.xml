@@ -6,10 +6,20 @@
     <description>Recent content in R on {Rich Majerus}</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Jul 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 06 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data Analytics Symposium Presentation</title>
+      <link>/post/data-analytics-symposium-presentation/</link>
+      <pubDate>Mon, 06 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-analytics-symposium-presentation/</guid>
+      <description>On Wednesday (8/8/2018), I&amp;rsquo;ll be presenting at APRA&amp;rsquo;s Data Analytics Symposium. My talk is focused on using leaflet to make our fundraising work more efficient. Here is the session description:
+ Much of our work is location specific—portfolio development, event planning, trip planning, etc. Therefore, to optimize our fundraising organizations, we must understand the geographic distribution of our alumni. This presentation will demonstrate how prospect researchers can create interactive maps using R and the javascript library leaflet.</description>
+    </item>
     
     <item>
       <title>Using Leaflet and Googlesheets in a Shiny App </title>

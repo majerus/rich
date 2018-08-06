@@ -6,10 +6,20 @@
     <description>Recent content on {Rich Majerus}</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Jul 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 06 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data Analytics Symposium Presentation</title>
+      <link>/post/data-analytics-symposium-presentation/</link>
+      <pubDate>Mon, 06 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/data-analytics-symposium-presentation/</guid>
+      <description>On Wednesday (8/8/2018), I&amp;rsquo;ll be presenting at APRA&amp;rsquo;s Data Analytics Symposium. My talk is focused on using leaflet to make our fundraising work more efficient. Here is the session description:
+ Much of our work is location specific—portfolio development, event planning, trip planning, etc. Therefore, to optimize our fundraising organizations, we must understand the geographic distribution of our alumni. This presentation will demonstrate how prospect researchers can create interactive maps using R and the javascript library leaflet.</description>
+    </item>
     
     <item>
       <title>Using Leaflet and Googlesheets in a Shiny App </title>
@@ -50,6 +60,15 @@ I&amp;rsquo;ve hiked Cutler before but forgot how awesome and awe-inspiring the 
       <description>My first course on DataCamp launched on July 5th, 2018. This course uses data on all American colleges and universities to explore various ways of mapping point data and income data to demonstrate how to map polygon data. In the later chapters, I cover how to add a few pieces of flair to leaflet maps in R.
 Here is one of the interactive maps from the last chapter&amp;hellip;
 The first chapter is free.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/post/2018-08-06-data-analytics-symposium-presentation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018-08-06-data-analytics-symposium-presentation/</guid>
+      <description>Data Analytics Symposium Presentation       code{white-space: pre;} pre:not([class]) { background-color: white; }  if (window.hljs) { hljs.configure({languages: []}); hljs.initHighlightingOnLoad(); if (document.readyState &amp;&amp; document.readyState === &#34;complete&#34;) { window.setTimeout(function() { hljs.initHighlighting(); }, 0); } }  h1 { font-size: 34px; } h1.title { font-size: 38px; } h2 { font-size: 30px; } h3 { font-size: 24px; } h4 { font-size: 18px; } h5 { font-size: 16px; } h6 { font-size: 12px; } .</description>
     </item>
     
   </channel>
