@@ -149,5 +149,5 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [[menu.main]]
 	name = "Resume"
-	url  = "https://docs.google.com/document/d/1rRnwwnWED2nVIRZx0g2AAACOCIfbZ3PPz7Yy_xD0ivU/edit?usp=sharing"
+	url  = "https://docs.google.com/document/d/1xgTykuBFj5FZkpCyH6pl3-gx7D7ve2So3wRyfhyW03c/edit?usp=sharing"
 	weight = 0
