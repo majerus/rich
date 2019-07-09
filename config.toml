@@ -13,7 +13,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 	# To provide some metadata for search engines feel free to add a few
     # information about you and your website.
 	name = "Rich Majerus"
-	description = "Personal website of Rich Majerus, AVP of Advancement Strategy and Donor Relations at Colby College. "
+	description = "Personal website of Rich Majerus, VP of Planning & Strategy, Queens University of Charlotte. "
 
 	# Format dates with Go's time formatting
 	date_format = "2006-01-02"
