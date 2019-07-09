@@ -51,7 +51,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 	[params.about]
 		hide  = false
 		title = "About Me..."
-		content = "I'm the Assistant Vice President of Donor Relations and Advancement Strategy at Colby College, where I work to develop new approaches to modeling and visualizing fundraising data. I teach R workshops and am listed in RStudio’s directory of instructors.  Additionally, I'm an instructor on DataCamp and a data science mentor with SpringBoard. Previously, I was a founder of Third Coast Analytics (TCA), a data science consulting firm (TCA’s IP was acquired by Capture Higher Ed in 2016)."
+		content = "I'm the VP of Planning & Strategy at Queens University of Charlotte.  Additionally, I'm an instructor on DataCamp and a data science mentor with SpringBoard. Previously, I was a founder of Third Coast Analytics (TCA), a data science consulting firm (TCA’s IP was acquired by Capture Higher Ed in 2016)."
 
 
 	[params.portfolio]
